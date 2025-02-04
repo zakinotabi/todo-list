@@ -5,5 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body></body>
+  <body>
+    <h1>Todo List</h1>
+
+    <button id="open-modal">Add New Task</button>
+
+    <dialog id="todo-modal">
+      <form id="todo-form">
+        <input type="text" id="title" placeholder="Title" required /><br />
+        <textarea id="description" placeholder="Description"></textarea><br />
+        <input type="date" id="dueDate" /><br />
+        <select id="priority">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option></select
+        ><br />
+        <textarea id="notes" placeholder="Additional Notes"></textarea><br />
+        <label>
+          <input type="checkbox" id="checklist" /> Mark as completed </label
+        ><br />
+        <button type="submit">Add Task</button>
+        <button type="button" id="close-modal">Close</button>
+      </form>
+    </dialog>
+
+    <h2>Tasks</h2>
+    <div id="todo-list"></div>
+  </body>
 </html>
