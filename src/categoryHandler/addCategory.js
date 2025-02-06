@@ -12,8 +12,8 @@ export function addCategory() {
   const cancelInputBtn = document.createElement("button");
 
   // Set up buttons
-  addInputBtn.classList.add("new-button");
-  cancelInputBtn.classList.add("new-button");
+  addInputBtn.classList.add("add-category-confirm");
+  cancelInputBtn.classList.add("cancel-category-confirm");
   addInputBtn.innerHTML = "Add";
   cancelInputBtn.innerHTML = "Cancel";
 
