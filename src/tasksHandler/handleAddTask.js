@@ -1,4 +1,7 @@
-export function handleAddTask() {
+import { makwNewtask } from "../dataHandler/localstorage";
+
+export function handleAddTask(event) {
+  event.preventDefault();
   // Get form inputs
   const title = document.getElementById("title").value;
   const description = document.getElementById("description").value;
@@ -6,25 +9,7 @@ export function handleAddTask() {
   const priority = document.getElementById("priority").value;
   const categoryItems = document.querySelectorAll(".category-item");
 
-  //   // Validate required fields
-  //   if (!title || !dueDate) {
-  //     alert("Title and Due Date are required!");
-  //     return;
-  //   }
-
-  //   // Create a task object
-  //   const task = {
-  //     title,
-  //     description,
-  //     dueDate,
-  //     priority,
-  //     completed: false, // Default to not completed
-  //   };
-
-  // Save the task to local storage or a global state (optional)
-  //  saveTask(task);
-
-  //   // Render the task in the tasks container
+  makwNewtask(title, description, dueDate, priority);
 
   const tasksContainer = document.getElementById("tasks-container");
 
@@ -43,47 +28,31 @@ export function handleAddTask() {
   // Append the task to the tasks container
   tasksContainer.appendChild(taskElement);
 
-  //   // Close the modal
-  //   const modalWindow = document.getElementById("todo-modal");
-  //   modalWindow.close();
+  // Close the modal
+  const modalWindow = document.getElementById("todo-modal");
+  modalWindow.close();
 
-  //   // Clear the form
-  //   clearForm();
+  // Clear the form
+  clearForm();
 }
 
-// function saveTask(task) {
-//   // Retrieve existing tasks from local storage or initialize an empty array
-//   const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+function clearForm() {
+  document.getElementById("title").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("due-date").value = "";
+  document.getElementById("priority").value = "high"; // Reset to default
+}
 
-//   // Add the new task to the array
-//   tasks.push(task);
+// Optional: Add functions to handle task completion and deletion
+function toggleTaskCompletion(button) {
+  const taskElement = button.closest(".task-item");
+  taskElement.classList.toggle("completed");
+  button.textContent = taskElement.classList.contains("completed")
+    ? "Undo"
+    : "Complete";
+}
 
-//   // Save the updated tasks array back to local storage
-//   localStorage.setItem("tasks", JSON.stringify(tasks));
-// }
-
-// function clearForm() {
-//   document.getElementById("title").value = "";
-//   document.getElementById("description").value = "";
-//   document.getElementById("due-date").value = "";
-//   document.getElementById("priority").value = "high"; // Reset to default
-// }
-
-// // Optional: Add functions to handle task completion and deletion
-// function toggleTaskCompletion(button) {
-//   const taskElement = button.closest(".task-item");
-//   taskElement.classList.toggle("completed");
-//   button.textContent = taskElement.classList.contains("completed")
-//     ? "Undo"
-//     : "Complete";
-// }
-
-// function deleteTask(button) {
-//   const taskElement = button.closest(".task-item");
-//   taskElement.remove();
-// }
-
-// <button onclick="toggleTaskCompletion(this)">${
-//     task.completed ? "Undo" : "Complete"
-//   }</button>
-//   <button onclick="deleteTask(this)">Delete</button>
+function deleteTask(button) {
+  const taskElement = button.closest(".task-item");
+  taskElement.remove();
+}

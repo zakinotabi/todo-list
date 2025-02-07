@@ -1,3 +1,5 @@
+import { handleCategoryItems } from "./handleCategoryItems";
+
 function createButton(text, className, onClick) {
   const button = document.createElement("button");
   button.classList.add(className);
@@ -25,7 +27,7 @@ export function showCategoryNewInput() {
 
   const categoryInput = createInput();
   const addInputBtn = createButton("Add", "add-category-confirm", () =>
-    addCategoryToList(categoryInput, newCategoryBtn, cancelInputBtn)
+    addCategoryToList(categoryInput.value)
   );
   // prettier-ignore
   const cancelInputBtn = createButton("Cancel", "cancel-category-confirm", () => {
@@ -36,14 +38,13 @@ export function showCategoryNewInput() {
   categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
 }
 
-function addCategoryToList(categoryInput, newCategoryBtn, cancelInputBtn) {
-  const categoryName = categoryInput.value;
+function addCategoryToList(categoryName) {
   const categoryList = document.querySelector(".categories-list");
 
   if (categoryName) {
     const newCategory = document.createElement("li");
     newCategory.classList.add("category-item");
-    newCategory.textContent = categoryName;
+    newCategory.innerHTML = `<div>${categoryName}</div>`;
 
     categoryList.append(newCategory);
 
@@ -54,8 +55,8 @@ function addCategoryToList(categoryInput, newCategoryBtn, cancelInputBtn) {
 
     addEventsToCategory(newCategory, deleteBtn);
 
-    cancelInputBtn.click();
-    newCategoryBtn.style.display = "block";
+    document.querySelector(".cancel-category-confirm").click();
+    newCategory.click();
   } else {
     alert("Please enter a category name!");
   }
@@ -71,9 +72,7 @@ function addEventsToCategory(category, deleteCategoryBtn) {
   });
 
   category.addEventListener("click", () => {
-    console.log(category);
-    handleCategoryItems(category);
-    saveCategorySelected(category);
+    handleCategoryItems(category.firstElementChild);
   });
 
   deleteCategoryBtn.addEventListener("click", (event) => {

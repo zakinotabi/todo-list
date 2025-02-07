@@ -7,7 +7,7 @@ export function addTask() {
 
   modalWidnow.showModal();
 
-  addButton.addEventListener("click", () => handleAddTask());
+  addButton.addEventListener("click", (event) => handleAddTask(event));
 
   closebutton.addEventListener("click", () => modalWidnow.close());
 }

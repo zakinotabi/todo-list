@@ -1,10 +1,10 @@
+let selectedCategory = ""; // Global variable to store the selected category
+
 export function handleCategoryItems(category) {
-  // const deleteCategoryBtn = category.firstElementChild;
+  selectedCategory = category.textContent; // Store category text
+  console.log("Selected Category:", selectedCategory);
 }
 
-let categorySelectedIndex = 0; // Declare in a higher scope
-
-export function saveCategorySelected(index) {
-  categorySelectedIndex = index; // Update the value
-  return categorySelectedIndex; // Return the updated value (optional)
+export function getSelectedCategory() {
+  return selectedCategory; // Provide access to the selected category
 }
