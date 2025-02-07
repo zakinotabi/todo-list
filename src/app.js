@@ -1,6 +1,6 @@
 import "./styles.css";
 import { showCategoryNewInput } from "./categoryHandler/addCategory";
-import { addTask } from "./tasksHandler/addTask";
+import { addTask2 } from "./tasksHandler/addTask2";
 // variables
 const newCategoryBtn = document.getElementById("new-category-btn");
 const newTaskBtn = document.getElementById("new-task-btn");
@@ -11,5 +11,10 @@ newCategoryBtn.addEventListener("click", () => {
 });
 
 newTaskBtn.addEventListener("click", () => {
-  addTask();
+  // show-close modal
+
+  const modalWidnow = document.getElementById("todo-modal");
+  modalWidnow.showModal();
+  const closebutton = document.getElementById("close-modal");
+  closebutton.addEventListener("click", () => modalWidnow.close());
 });
