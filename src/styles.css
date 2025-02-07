@@ -163,3 +163,13 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
 }
+.delete-category-btn {
+  display: none;
+  align-self: flex-end;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}

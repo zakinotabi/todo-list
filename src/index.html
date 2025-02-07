@@ -12,9 +12,10 @@
       <section class="categories-section">
         <h2>Categories</h2>
         <ul class="categories-list">
-          <li class="category-item selected">Personal</li>
-          <li class="category-item">Work</li>
-          <li class="category-item">Shopping</li>
+          <li class="category-item selected">
+            Personal
+            <button class="delete-category-btn">delete</button>
+          </li>
         </ul>
         <button class="new-button" id="new-category-btn">+ New Category</button>
       </section>
@@ -36,11 +37,7 @@
           <input type="text" id="title" placeholder="Title" required />
           <textarea id="description" placeholder="Description"></textarea>
           <input type="date" id="due-date" />
-          <select id="category">
-            <option value="Personal">Personal</option>
-            <option value="Work">Work</option>
-            <option value="Shopping">Shopping</option>
-          </select>
+
           <select id="priority">
             <option value="high">High</option>
             <option value="medium">Medium</option>
