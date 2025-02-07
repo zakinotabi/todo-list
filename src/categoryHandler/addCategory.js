@@ -19,32 +19,24 @@ function removeCategoryInput(input, addBtn, cancelBtn, newCategoryBtn) {
   newCategoryBtn.style.display = "block";
 }
 
-export function addCategory() {
+export function showCategoryNewInput() {
   const categoryArea = document.querySelector(".categories-section");
   const newCategoryBtn = document.getElementById("new-category-btn");
 
   const categoryInput = createInput();
   const addInputBtn = createButton("Add", "add-category-confirm", () =>
-    handleAddCategory(categoryInput, newCategoryBtn, cancelInputBtn)
+    addCategoryToList(categoryInput, newCategoryBtn, cancelInputBtn)
   );
-  const cancelInputBtn = createButton(
-    "Cancel",
-    "cancel-category-confirm",
-    () => {
-      removeCategoryInput(
-        categoryInput,
-        addInputBtn,
-        cancelInputBtn,
-        newCategoryBtn
-      );
-    }
-  );
+  // prettier-ignore
+  const cancelInputBtn = createButton("Cancel", "cancel-category-confirm", () => {
+    removeCategoryInput(categoryInput, addInputBtn, cancelInputBtn, newCategoryBtn);
+  });
 
   newCategoryBtn.style.display = "none";
   categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
 }
 
-function handleAddCategory(categoryInput, newCategoryBtn, cancelInputBtn) {
+function addCategoryToList(categoryInput, newCategoryBtn, cancelInputBtn) {
   const categoryName = categoryInput.value;
   const categoryList = document.querySelector(".categories-list");
 
