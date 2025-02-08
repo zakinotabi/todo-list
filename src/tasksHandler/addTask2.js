@@ -1,3 +1,5 @@
+import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
+
 let dataArray = [];
 
 getdatafromlocalAndShowIt();
@@ -16,10 +18,10 @@ export function handleAddTask(event) {
   const date = document.getElementById("due-date").value;
   const priority = document.getElementById("priority").value;
   const id = Date.now();
-  const categoryItems = document.querySelectorAll(".category-item");
+  const category = getSelectedCategory();
 
   // make/push new object
-  makeNewObject(title, description, date, priority, id);
+  makeNewObject(title, description, date, priority, id, category);
 
   // add array to localstorage
   saveToLocal();
@@ -32,12 +34,13 @@ export function handleAddTask(event) {
   modalWindow.close();
 }
 
-function makeNewObject(title, description, date, priority, id) {
+function makeNewObject(title, description, date, priority, id, category) {
+  //check validity
   if (!title || !description || !date || !priority) {
     alert("Please fill out all fields.");
     return;
   } else {
-    const taskObj = new Task(title, description, date, priority, id);
+    const taskObj = new Task(title, description, date, priority, id, category);
     dataArray.push(taskObj);
   }
 }
@@ -106,7 +109,5 @@ taskElement.addEventListener("click", (element) => {
 
     data = data.filter((task) => task.id != elementId);
     window.localStorage.setItem("tasks", JSON.stringify(data));
-    // getdatafromlocalAndShowIt();
-    // displayTasks();
   }
 });
