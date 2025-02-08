@@ -43,7 +43,7 @@ function makeNewObject(title, description, date, priority, id) {
 }
 
 class Task {
-  constructor(title, desc, date, priority, category, id) {
+  constructor(title, desc, date, priority, id, category) {
     this.title = title;
     this.desc = desc;
     this.date = date;
@@ -101,8 +101,12 @@ taskElement.addEventListener("click", (element) => {
     element.target.parentElement.remove();
     let data = JSON.parse(window.localStorage.getItem("tasks"));
     let elementId = element.target.parentElement.getAttribute("data-id");
+    console.log(data);
+    console.log(elementId);
+
     data = data.filter((task) => task.id != elementId);
-    getdatafromlocalAndShowIt();
+    window.localStorage.setItem("tasks", JSON.stringify(data));
+    // getdatafromlocalAndShowIt();
     // displayTasks();
   }
 });
