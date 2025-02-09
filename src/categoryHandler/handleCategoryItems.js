@@ -1,10 +1,15 @@
-let selectedCategory = ""; // Global variable to store the selected category
+import { getdatafromlocalAndShowIt } from "../tasksHandler/addTask2";
+
+let selectedCategoryId = "Example"; // Global variable to store the selected category
 
 export function handleCategoryItems(categoryDiv) {
-  selectedCategory = categoryDiv.textContent; // Store category text
-  console.log("Selected Category:", selectedCategory);
+  selectedCategoryId = categoryDiv.getAttribute("cat-id"); // Store category text
+  console.log("Selected Category:", selectedCategoryId);
+  getdatafromlocalAndShowIt(selectedCategoryId);
 }
 
 export function getSelectedCategory() {
-  return selectedCategory; // Provide access to the selected category
+  if (selectedCategoryId != "null") {
+    return selectedCategoryId; // Provide access to the selected category
+  }
 }

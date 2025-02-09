@@ -2,7 +2,7 @@ import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
 
 let dataArray = [];
 
-getdatafromlocalAndShowIt();
+getdatafromlocalAndShowIt(getSelectedCategory());
 
 // set event
 const addButton = document.getElementById("add-task-confirm");
@@ -18,15 +18,15 @@ export function handleAddTask(event) {
   const date = document.getElementById("due-date").value;
   const priority = document.getElementById("priority").value;
   const id = Date.now();
-  const category = getSelectedCategory();
+  const categoryId = getSelectedCategory();
 
   // make/push new object
-  makeNewObject(title, description, date, priority, id, category);
+  makeNewObject(title, description, date, priority, id, categoryId);
 
   // add array to localstorage
   saveToLocal();
   // show tasks in the DOM
-  getdatafromlocalAndShowIt();
+  getdatafromlocalAndShowIt(categoryId);
   // Clear the form
   clearForm();
   // Close the modal
@@ -34,24 +34,25 @@ export function handleAddTask(event) {
   modalWindow.close();
 }
 
-function makeNewObject(title, description, date, priority, id, category) {
+function makeNewObject(title, description, date, priority, id, categoryId) {
   //check validity
   if (!title || !description || !date || !priority) {
     alert("Please fill out all fields.");
     return;
   } else {
-    const taskObj = new Task(title, description, date, priority, id, category);
+    //prettier-ignore
+    const taskObj = new Task(title, description, date, priority, id, categoryId);
     dataArray.push(taskObj);
   }
 }
 
 class Task {
-  constructor(title, desc, date, priority, id, category) {
+  constructor(title, desc, date, priority, id, categoryId) {
     this.title = title;
     this.desc = desc;
     this.date = date;
     this.priority = priority;
-    this.category = category;
+    this.categoryId = categoryId;
     this.completed = false;
     this.id = id;
   }
@@ -61,11 +62,13 @@ function saveToLocal() {
   window.localStorage.setItem("tasks", JSON.stringify(dataArray));
 }
 
-function getdatafromlocalAndShowIt() {
+export function getdatafromlocalAndShowIt(categoryId) {
   let data = window.localStorage.getItem("tasks");
   if (data) {
     let tasks = JSON.parse(data);
-    displayTasks(tasks);
+    let categoryTasks = tasks.filter((task) => task.categoryId === categoryId);
+
+    displayTasks(categoryTasks);
   }
 }
 

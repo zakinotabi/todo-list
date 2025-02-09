@@ -44,6 +44,7 @@ function addCategoryToList(categoryName) {
   if (categoryName) {
     const newCategory = document.createElement("li");
     newCategory.classList.add("category-item");
+    newCategory.setAttribute("cat-id", Date.now());
     newCategory.innerHTML = `<div>${categoryName}</div>`;
 
     categoryList.append(newCategory);
@@ -55,7 +56,7 @@ function addCategoryToList(categoryName) {
 
     addEventsToCategory(newCategory, deleteBtn);
 
-    document.querySelector(".cancel-category-confirm").click();
+    document.querySelector(".cancel-category-confirm")?.click();
     newCategory.click();
   } else {
     alert("Please enter a category name!");
@@ -72,7 +73,7 @@ function addEventsToCategory(category, deleteCategoryBtn) {
   });
 
   category.addEventListener("click", () => {
-    handleCategoryItems(category.firstElementChild);
+    handleCategoryItems(category);
   });
 
   deleteCategoryBtn.addEventListener("click", (event) => {
@@ -80,3 +81,6 @@ function addEventsToCategory(category, deleteCategoryBtn) {
     category.remove();
   });
 }
+
+// initiat with example category
+addCategoryToList("Example");
