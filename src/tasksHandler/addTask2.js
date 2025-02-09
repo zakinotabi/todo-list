@@ -2,7 +2,7 @@ import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
 
 let dataArray = [];
 
-getdatafromlocalAndShowIt(getSelectedCategory());
+getdatafromlocalAndShowIt("Example");
 
 // set event
 const addButton = document.getElementById("add-task-confirm");

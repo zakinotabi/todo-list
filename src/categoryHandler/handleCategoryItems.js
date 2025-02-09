@@ -9,7 +9,5 @@ export function handleCategoryItems(categoryDiv) {
 }
 
 export function getSelectedCategory() {
-  if (selectedCategoryId != "null") {
-    return selectedCategoryId; // Provide access to the selected category
-  }
+  return selectedCategoryId; // Provide access to the selected category
 }

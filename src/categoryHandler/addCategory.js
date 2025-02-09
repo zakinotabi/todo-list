@@ -37,11 +37,40 @@ export function showCategoryNewInput() {
   newCategoryBtn.style.display = "none";
   categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
 }
+let categories = [];
+makeCategory();
+// (function initiat() {
+//   categories.push(JSON.parse(window.localStorage.getItem("categories")));
 
+// })();
 function addCategoryToList(categoryName) {
-  const categoryList = document.querySelector(".categories-list");
+  // save to local
 
   if (categoryName) {
+    categories.push(categoryName);
+    console.log(categories);
+    saveCategoryInStorage();
+    makeCategory();
+  } else {
+    alert("Please enter a category name!");
+  }
+}
+
+function saveCategoryInStorage() {
+  window.localStorage.setItem("categories", JSON.stringify(categories));
+}
+function makeCategory() {
+  let data = window.localStorage.getItem("categories");
+  if (data) {
+    let categoriesInStorage = JSON.parse(data);
+    displayCategories(categoriesInStorage);
+  }
+}
+
+function displayCategories(categoriesInStorage) {
+  const categoryList = document.querySelector(".categories-list");
+  categoryList.innerHTML = "";
+  categoriesInStorage.forEach((categoryName) => {
     const newCategory = document.createElement("li");
     newCategory.classList.add("category-item");
     newCategory.setAttribute("cat-id", Date.now());
@@ -58,9 +87,7 @@ function addCategoryToList(categoryName) {
 
     document.querySelector(".cancel-category-confirm")?.click();
     newCategory.click();
-  } else {
-    alert("Please enter a category name!");
-  }
+  });
 }
 
 function addEventsToCategory(category, deleteCategoryBtn) {
@@ -81,6 +108,3 @@ function addEventsToCategory(category, deleteCategoryBtn) {
     category.remove();
   });
 }
-
-// initiat with example category
-addCategoryToList("Example");
