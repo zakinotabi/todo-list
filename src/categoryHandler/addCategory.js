@@ -106,7 +106,13 @@ function displayCategories(categoriesInStorage) {
     newCategory.click();
   });
 }
-f;
+function deleteCategoryFromStorage(categoryHolder) {
+  let data = JSON.parse(window.localStorage.getItem("categories"));
+  let categoryId = categoryHolder.getAttribute("cat-id");
+  data = data.filter((category) => category.id != categoryId);
+  console.log(data);
+  window.localStorage.setItem("categories", JSON.stringify(data));
+}
 function addEventsToCategory(category, deleteCategoryBtn) {
   category.addEventListener("mouseover", () => {
     deleteCategoryBtn.style.display = "block";
@@ -123,5 +129,6 @@ function addEventsToCategory(category, deleteCategoryBtn) {
   deleteCategoryBtn.addEventListener("click", (event) => {
     event.stopPropagation();
     category.remove();
+    deleteCategoryFromStorage(category);
   });
 }
