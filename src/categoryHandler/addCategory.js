@@ -38,16 +38,32 @@ export function showCategoryNewInput() {
   categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
 }
 let categories = [];
-makeCategory();
-// (function initiat() {
-//   categories.push(JSON.parse(window.localStorage.getItem("categories")));
 
-// })();
+class Category {
+  constructor(categoryName, catId) {
+    this.name = categoryName;
+    this.id = catId;
+  }
+}
+
+(function initiat() {
+  let categoriesFromStorage = JSON.parse(
+    window.localStorage.getItem("categories")
+  );
+  if (categoriesFromStorage) {
+    categoriesFromStorage.forEach((element) => {
+      categories.push(element);
+    });
+    makeCategory();
+  }
+})();
+
 function addCategoryToList(categoryName) {
   // save to local
 
   if (categoryName) {
-    categories.push(categoryName);
+    let newCat = new Category(categoryName, Date.now());
+    categories.push(newCat);
     console.log(categories);
     saveCategoryInStorage();
     makeCategory();
@@ -65,16 +81,17 @@ function makeCategory() {
     let categoriesInStorage = JSON.parse(data);
     displayCategories(categoriesInStorage);
   }
+  document.querySelectorAll(".category-item")[0]?.click();
 }
 
 function displayCategories(categoriesInStorage) {
   const categoryList = document.querySelector(".categories-list");
   categoryList.innerHTML = "";
-  categoriesInStorage.forEach((categoryName) => {
+  categoriesInStorage.forEach((category) => {
     const newCategory = document.createElement("li");
     newCategory.classList.add("category-item");
-    newCategory.setAttribute("cat-id", Date.now());
-    newCategory.innerHTML = `<div>${categoryName}</div>`;
+    newCategory.setAttribute("cat-id", category.id);
+    newCategory.innerHTML = `<div>${category.name}</div>`;
 
     categoryList.append(newCategory);
 
@@ -89,7 +106,7 @@ function displayCategories(categoriesInStorage) {
     newCategory.click();
   });
 }
-
+f;
 function addEventsToCategory(category, deleteCategoryBtn) {
   category.addEventListener("mouseover", () => {
     deleteCategoryBtn.style.display = "block";

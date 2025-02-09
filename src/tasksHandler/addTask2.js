@@ -2,7 +2,15 @@ import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
 
 let dataArray = [];
 
-getdatafromlocalAndShowIt("Example");
+(function initiat() {
+  let tasksFromStorage = JSON.parse(window.localStorage.getItem("tasks"));
+  if (tasksFromStorage) {
+    tasksFromStorage.forEach((element) => {
+      dataArray.push(element);
+    });
+    getdatafromlocalAndShowIt();
+  }
+})();
 
 // set event
 const addButton = document.getElementById("add-task-confirm");
@@ -107,8 +115,6 @@ taskElement.addEventListener("click", (element) => {
     element.target.parentElement.remove();
     let data = JSON.parse(window.localStorage.getItem("tasks"));
     let elementId = element.target.parentElement.getAttribute("data-id");
-    console.log(data);
-    console.log(elementId);
 
     data = data.filter((task) => task.id != elementId);
     window.localStorage.setItem("tasks", JSON.stringify(data));
