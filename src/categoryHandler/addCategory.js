@@ -64,7 +64,7 @@ function addCategoryToList(categoryName) {
   if (categoryName) {
     let newCat = new Category(categoryName, Date.now());
     categories.push(newCat);
-    console.log(categories);
+
     saveCategoryInStorage();
     makeCategory();
   } else {
@@ -110,9 +110,18 @@ function deleteCategoryFromStorage(categoryHolder) {
   let data = JSON.parse(window.localStorage.getItem("categories"));
   let categoryId = categoryHolder.getAttribute("cat-id");
   data = data.filter((category) => category.id != categoryId);
-  console.log(data);
+
   window.localStorage.setItem("categories", JSON.stringify(data));
 }
+
+function deleteTasksOfThisCategoryFromStorage(categoryHolder) {
+  let data = JSON.parse(window.localStorage.getItem("tasks"));
+  let categoryId = categoryHolder.getAttribute("cat-id");
+  data = data.filter((task) => task.categoryId != categoryId);
+  console.log(data);
+  window.localStorage.setItem("tasks", JSON.stringify(data));
+}
+
 function addEventsToCategory(category, deleteCategoryBtn) {
   category.addEventListener("mouseover", () => {
     deleteCategoryBtn.style.display = "block";
@@ -130,5 +139,6 @@ function addEventsToCategory(category, deleteCategoryBtn) {
     event.stopPropagation();
     category.remove();
     deleteCategoryFromStorage(category);
+    deleteTasksOfThisCategoryFromStorage(category);
   });
 }

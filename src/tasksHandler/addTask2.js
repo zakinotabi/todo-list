@@ -91,6 +91,7 @@ function displayTasks(tasks) {
     taskElement.className = "task-item";
     taskElement.setAttribute("data-id", task.id);
     taskElement.innerHTML = `
+      <input type="checkbox" name="Completed" id="checkbox-task">
       <h3>${task.title}</h3>
       <p>${task.desc}</p>
       <p> ${task.date}</p>
@@ -105,8 +106,7 @@ function displayTasks(tasks) {
 function clearForm() {
   document.getElementById("title").value = "";
   document.getElementById("description").value = "";
-  document.getElementById("due-date").value = "";
-  document.getElementById("priority").value = "";
+  document.getElementById("due-date").valueAsDate = new Date();
 }
 
 const taskElement = document.getElementById("tasks-container");
