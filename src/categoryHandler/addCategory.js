@@ -95,12 +95,11 @@ function displayCategories(categoriesInStorage) {
 
     categoryList.append(newCategory);
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("delete-category-btn");
-    deleteBtn.textContent = "Delete";
-    newCategory.append(deleteBtn);
+    const deleteBtn = createButton("Delete", "inside-category-btn");
+    const editBtn = createButton("Edit", "inside-category-btn");
+    newCategory.append(editBtn, deleteBtn);
 
-    addEventsToCategory(newCategory, deleteBtn);
+    addEventsToCategory(newCategory, deleteBtn, editBtn);
 
     document.querySelector(".cancel-category-confirm")?.click();
     newCategory.click();
@@ -110,7 +109,6 @@ function deleteCategoryFromStorage(categoryHolder) {
   let data = JSON.parse(window.localStorage.getItem("categories"));
   let categoryId = categoryHolder.getAttribute("cat-id");
   data = data.filter((category) => category.id != categoryId);
-
   window.localStorage.setItem("categories", JSON.stringify(data));
 }
 
@@ -118,27 +116,70 @@ function deleteTasksOfThisCategoryFromStorage(categoryHolder) {
   let data = JSON.parse(window.localStorage.getItem("tasks"));
   let categoryId = categoryHolder.getAttribute("cat-id");
   data = data.filter((task) => task.categoryId != categoryId);
-  console.log(data);
   window.localStorage.setItem("tasks", JSON.stringify(data));
 }
 
-function addEventsToCategory(category, deleteCategoryBtn) {
+function updateCategoryNameInStorage(categoryHolder, newName) {
+  let data = JSON.parse(window.localStorage.getItem("categories"));
+  let categoryId = categoryHolder.getAttribute("cat-id");
+
+  data.forEach((category) => {
+    if (category.id === parseInt(categoryId)) {
+      category.name = newName;
+    }
+  });
+  window.localStorage.setItem("categories", JSON.stringify(data));
+}
+
+function categoryButtonsAnimation(category, button) {
   category.addEventListener("mouseover", () => {
-    deleteCategoryBtn.style.display = "block";
+    if (category.children.length <= 3) {
+      button.style.display = "block";
+    }
   });
 
   category.addEventListener("mouseout", () => {
-    deleteCategoryBtn.style.display = "none";
+    button.style.display = "none";
   });
+}
 
+function addEventsToCategory(category, deleteCategoryBtn, editCategoryBtn) {
+  //
+  categoryButtonsAnimation(category, deleteCategoryBtn);
+  categoryButtonsAnimation(category, editCategoryBtn);
   category.addEventListener("click", () => {
     handleCategoryItems(category);
   });
 
-  deleteCategoryBtn.addEventListener("click", (event) => {
-    event.stopPropagation();
+  deleteCategoryBtn.addEventListener("click", () => {
     category.remove();
     deleteCategoryFromStorage(category);
     deleteTasksOfThisCategoryFromStorage(category);
+  });
+
+  editCategoryBtn.addEventListener("click", () => {
+    const input = createInput();
+    input.value = category.firstElementChild.innerHTML;
+
+    category.firstElementChild.style.display = "none";
+    deleteCategoryBtn.style.display = "none";
+    editCategoryBtn.style.display = "none";
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") input.blur();
+    });
+    input.addEventListener("blur", () => {
+      if (category.firstElementChild.innerHTML !== input.value) {
+        category.firstElementChild.innerHTML = input.value;
+        //update in localdtorage
+        updateCategoryNameInStorage(category, input.value);
+      }
+      category.firstElementChild.style.display = "";
+      categoryButtonsAnimation(category, deleteCategoryBtn);
+      categoryButtonsAnimation(category, editCategoryBtn);
+      input.remove();
+    });
+    category.append(input);
+    input.focus();
   });
 }

@@ -163,7 +163,7 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
 }
-.delete-category-btn {
+.inside-category-btn {
   display: none;
   align-self: flex-end;
 }
