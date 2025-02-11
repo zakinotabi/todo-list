@@ -98,10 +98,14 @@ function displayTasks(tasks) {
       <p> ${task.date}</p>
       <p>Priority: ${task.priority}</p>
     `;
-    const deleteBtn = createButton("Delete", "delete-btn", (event) => {
+    const editBtn = createButton("Edit", "inside-task-btn", (event) => {
+      editTask(event);
+    });
+    const deleteBtn = createButton("Delete", "inside-task-btn", (event) => {
       deleteTask(event);
     });
-    taskElement.append(deleteBtn);
+
+    taskElement.append(editBtn, deleteBtn);
     tasksContainer.appendChild(taskElement);
   });
 }
@@ -111,7 +115,21 @@ function clearForm() {
   document.getElementById("description").value = "";
   document.getElementById("due-date").valueAsDate = new Date();
 }
+function editTask(event) {
+  let data = JSON.parse(window.localStorage.getItem("tasks"));
+  let elementId = event.target.parentElement.getAttribute("data-id");
 
+  data.forEach((task) => {
+    if (task.id === parseInt(elementId)) {
+      document.getElementById("title").value = task.title;
+      document.getElementById("description").value = task.desc;
+      document.getElementById("due-date").value = task.Date;
+      document.getElementById("priority").value = task.priority;
+    }
+  });
+  const modalWidnow = document.getElementById("todo-modal");
+  modalWidnow.showModal();
+}
 function deleteTask(event) {
   event.target.parentElement.remove();
   let data = JSON.parse(window.localStorage.getItem("tasks"));
