@@ -1,3 +1,4 @@
+import { createButton } from "../categoryHandler/addCategory";
 import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
 
 let dataArray = [];
@@ -96,9 +97,11 @@ function displayTasks(tasks) {
       <p>${task.desc}</p>
       <p> ${task.date}</p>
       <p>Priority: ${task.priority}</p>
-      <button class="delete-btn">delete</button>
     `;
-
+    const deleteBtn = createButton("Delete", "delete-btn", (event) => {
+      deleteTask(event);
+    });
+    taskElement.append(deleteBtn);
     tasksContainer.appendChild(taskElement);
   });
 }
@@ -109,14 +112,11 @@ function clearForm() {
   document.getElementById("due-date").valueAsDate = new Date();
 }
 
-const taskElement = document.getElementById("tasks-container");
-taskElement.addEventListener("click", (element) => {
-  if (element.target.classList.contains("delete-btn")) {
-    element.target.parentElement.remove();
-    let data = JSON.parse(window.localStorage.getItem("tasks"));
-    let elementId = element.target.parentElement.getAttribute("data-id");
+function deleteTask(event) {
+  event.target.parentElement.remove();
+  let data = JSON.parse(window.localStorage.getItem("tasks"));
+  let elementId = event.target.parentElement.getAttribute("data-id");
 
-    data = data.filter((task) => task.id != elementId);
-    window.localStorage.setItem("tasks", JSON.stringify(data));
-  }
-});
+  data = data.filter((task) => task.id != elementId);
+  window.localStorage.setItem("tasks", JSON.stringify(data));
+}
