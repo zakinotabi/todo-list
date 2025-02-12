@@ -173,3 +173,16 @@ li {
   align-items: center;
   justify-content: space-between;
 }
+.high {
+  border-right: #ff4444 2px solid;
+}
+.medium {
+  border-right: #ffe344 2px solid;
+}
+.low {
+  border-right: #44c1ff 2px solid;
+}
+.checked {
+  opacity: 0.8;
+  text-decoration: overline;
+}

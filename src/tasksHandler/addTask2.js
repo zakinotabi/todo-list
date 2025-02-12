@@ -89,7 +89,7 @@ function displayTasks(tasks) {
   tasks.forEach((task) => {
     // Create a new task element
     const taskElement = document.createElement("li");
-    taskElement.className = "task-item";
+    taskElement.classList = `task-item ${task.priority}`;
     taskElement.setAttribute("data-id", task.id);
     taskElement.innerHTML = `
       <input type="checkbox" name="Completed" id="checkbox-task">
@@ -98,6 +98,7 @@ function displayTasks(tasks) {
       <p> ${task.date}</p>
       <p>Priority: ${task.priority}</p>
     `;
+
     const editBtn = createButton("Edit", "inside-task-btn", (event) => {
       editTask(event);
     });
@@ -123,7 +124,7 @@ function editTask(event) {
     if (task.id === parseInt(elementId)) {
       document.getElementById("title").value = task.title;
       document.getElementById("description").value = task.desc;
-      document.getElementById("due-date").value = task.Date;
+      document.getElementById("due-date").valueAsDate = new Date(task.date);
       document.getElementById("priority").value = task.priority;
     }
   });
@@ -138,3 +139,11 @@ function deleteTask(event) {
   data = data.filter((task) => task.id != elementId);
   window.localStorage.setItem("tasks", JSON.stringify(data));
 }
+
+const checkboxs = document.querySelectorAll("#checkbox-task");
+
+checkboxs.forEach((checkbox) => {
+  checkbox.addEventListener("change", () => {
+    checkbox.parentElement.classList.toggle("checked");
+  });
+});
