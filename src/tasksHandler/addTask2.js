@@ -99,6 +99,11 @@ function displayTasks(tasks) {
       <p>Priority: ${task.priority}</p>
     `;
 
+    const checkbox = taskElement.firstElementChild;
+    checkbox.addEventListener("change", () => {
+      checkbox.parentElement.classList.toggle("checked");
+    });
+
     const editBtn = createButton("Edit", "inside-task-btn", (event) => {
       editTask(event);
     });
@@ -139,11 +144,3 @@ function deleteTask(event) {
   data = data.filter((task) => task.id != elementId);
   window.localStorage.setItem("tasks", JSON.stringify(data));
 }
-
-const checkboxs = document.querySelectorAll("#checkbox-task");
-
-checkboxs.forEach((checkbox) => {
-  checkbox.addEventListener("change", () => {
-    checkbox.parentElement.classList.toggle("checked");
-  });
-});
