@@ -135,6 +135,9 @@ function editTask(event) {
   });
   const modalWidnow = document.getElementById("todo-modal");
   modalWidnow.showModal();
+
+  const addButton = document.getElementById("add-task-confirm");
+  addButton.onclick = () => updateTask();
 }
 function deleteTask(event) {
   event.target.parentElement.remove();
