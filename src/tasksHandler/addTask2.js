@@ -3,6 +3,8 @@ import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
 
 let dataArray = [];
 
+let editMode = false;
+
 (function initiat() {
   let tasksFromStorage = JSON.parse(window.localStorage.getItem("tasks"));
   if (tasksFromStorage) {
@@ -15,7 +17,14 @@ let dataArray = [];
 
 // set event
 const addButton = document.getElementById("add-task-confirm");
-addButton.addEventListener("click", (event) => handleAddTask(event));
+addButton.addEventListener("click", (event) => {
+  if (!editMode) {
+    handleAddTask(event);
+  } else {
+    updateTask();
+    editMode = false;
+  }
+});
 // set date to today
 document.getElementById("due-date").valueAsDate = new Date();
 
@@ -122,22 +131,40 @@ function clearForm() {
   document.getElementById("due-date").valueAsDate = new Date();
 }
 function editTask(event) {
+  event.preventDefault();
+  editMode = true;
   let data = JSON.parse(window.localStorage.getItem("tasks"));
   let elementId = event.target.parentElement.getAttribute("data-id");
-
+  const addButton = document.getElementById("add-task-confirm");
   data.forEach((task) => {
     if (task.id === parseInt(elementId)) {
       document.getElementById("title").value = task.title;
       document.getElementById("description").value = task.desc;
       document.getElementById("due-date").valueAsDate = new Date(task.date);
       document.getElementById("priority").value = task.priority;
+
+      // addButton.onclick = () => updateTask();
+    }
+
+    function updateTask() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      const date = document.getElementById("due-date").value;
+      const priority = document.getElementById("priority").value;
+
+      task.title = title;
+      task.desc = description;
+      task.date = date;
+      task.priority = priority;
+      window.localStorage.setItem("tasks", JSON.stringify(data));
     }
   });
+
   const modalWidnow = document.getElementById("todo-modal");
   modalWidnow.showModal();
 
-  const addButton = document.getElementById("add-task-confirm");
-  addButton.onclick = () => updateTask();
+  const closebutton = document.getElementById("close-modal");
+  closebutton.onclick = () => modalWidnow.close();
 }
 function deleteTask(event) {
   event.target.parentElement.remove();
@@ -146,4 +173,13 @@ function deleteTask(event) {
 
   data = data.filter((task) => task.id != elementId);
   window.localStorage.setItem("tasks", JSON.stringify(data));
+}
+
+function updateTask() {
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const date = document.getElementById("due-date").value;
+  const priority = document.getElementById("priority").value;
+  const id = Date.now();
+  const categoryId = getSelectedCategory();
 }
