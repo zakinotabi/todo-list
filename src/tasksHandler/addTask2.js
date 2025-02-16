@@ -4,7 +4,7 @@ import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
 let dataArray = [];
 
 let editMode = false;
-
+let currentEditId;
 (function initiat() {
   let tasksFromStorage = JSON.parse(window.localStorage.getItem("tasks"));
   if (tasksFromStorage) {
@@ -16,12 +16,18 @@ let editMode = false;
 })();
 
 // set event
-const addButton = document.getElementById("add-task-confirm");
-addButton.addEventListener("click", (event) => {
-  if (!editMode) {
-    handleAddTask(event);
-  }
-});
+// Set event listener for Add/Update button
+document
+  .getElementById("add-task-confirm")
+  .addEventListener("click", (event) => {
+    if (!editMode) {
+      handleAddTask(event);
+    } else {
+      updateTask(event);
+      editMode = false;
+      currentEditId = null; // Reset after update
+    }
+  });
 // set date to today
 document.getElementById("due-date").valueAsDate = new Date();
 
@@ -140,25 +146,7 @@ function editTask(event) {
       document.getElementById("description").value = task.desc;
       document.getElementById("due-date").valueAsDate = new Date(task.date);
       document.getElementById("priority").value = task.priority;
-      addButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        updateTask();
-        modalWidnow.close();
-        getdatafromlocalAndShowIt(getSelectedCategory());
-      });
-    }
-
-    function updateTask() {
-      const title = document.getElementById("title").value;
-      const description = document.getElementById("description").value;
-      const date = document.getElementById("due-date").value;
-      const priority = document.getElementById("priority").value;
-
-      task.title = title;
-      task.desc = description;
-      task.date = date;
-      task.priority = priority;
-      window.localStorage.setItem("tasks", JSON.stringify(data));
+      currentEditId = elementId;
     }
   });
 
@@ -168,6 +156,25 @@ function editTask(event) {
   const closebutton = document.getElementById("close-modal");
   closebutton.onclick = () => modalWidnow.close();
 }
+
+function updateTask(event) {
+  event.preventDefault();
+  let data = JSON.parse(window.localStorage.getItem("tasks"));
+  data.forEach((task) => {
+    if (task.id === parseInt(currentEditId)) {
+      task.title = document.getElementById("title").value;
+      task.desc = document.getElementById("description").value;
+      task.date = document.getElementById("due-date").value;
+      task.priority = document.getElementById("priority").value;
+    }
+  });
+  document.getElementById("close-modal").click();
+  window.localStorage.setItem("tasks", JSON.stringify(data));
+  getdatafromlocalAndShowIt(getSelectedCategory());
+  editMode = false;
+  clearForm();
+}
+
 function deleteTask(event) {
   event.target.parentElement.remove();
   let data = JSON.parse(window.localStorage.getItem("tasks"));
@@ -175,13 +182,4 @@ function deleteTask(event) {
 
   data = data.filter((task) => task.id != elementId);
   window.localStorage.setItem("tasks", JSON.stringify(data));
-}
-
-function updateTask() {
-  const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
-  const date = document.getElementById("due-date").value;
-  const priority = document.getElementById("priority").value;
-  const id = Date.now();
-  const categoryId = getSelectedCategory();
 }
