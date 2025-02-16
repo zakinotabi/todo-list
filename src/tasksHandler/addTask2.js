@@ -20,9 +20,6 @@ const addButton = document.getElementById("add-task-confirm");
 addButton.addEventListener("click", (event) => {
   if (!editMode) {
     handleAddTask(event);
-  } else {
-    updateTask();
-    editMode = false;
   }
 });
 // set date to today
@@ -130,6 +127,7 @@ function clearForm() {
   document.getElementById("description").value = "";
   document.getElementById("due-date").valueAsDate = new Date();
 }
+
 function editTask(event) {
   event.preventDefault();
   editMode = true;
@@ -142,8 +140,12 @@ function editTask(event) {
       document.getElementById("description").value = task.desc;
       document.getElementById("due-date").valueAsDate = new Date(task.date);
       document.getElementById("priority").value = task.priority;
-
-      // addButton.onclick = () => updateTask();
+      addButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        updateTask();
+        modalWidnow.close();
+        getdatafromlocalAndShowIt(getSelectedCategory());
+      });
     }
 
     function updateTask() {
