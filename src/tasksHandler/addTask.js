@@ -1,5 +1,5 @@
-import { createButton } from "../categoryHandler/addCategory";
-import { getSelectedCategory } from "../categoryHandler/handleCategoryItems";
+import { DOMUtils } from "../ui/DOMUtils";
+import { getSelectedCategory } from "../handlers/categoryHandler";
 import { Task } from "../components/task";
 // Set event listener for Add/Update button
 
@@ -105,12 +105,20 @@ export class HandleAddTask {
         checkbox.parentElement.classList.toggle("checked");
       });
 
-      const editBtn = createButton("Edit", "inside-task-btn", (event) => {
-        HandleAddTask.editTask(event);
-      });
-      const deleteBtn = createButton("Delete", "inside-task-btn", (event) => {
-        HandleAddTask.deleteTask(event, task.id);
-      });
+      const editBtn = DOMUtils.createButton(
+        "Edit",
+        "inside-task-btn",
+        (event) => {
+          HandleAddTask.editTask(event);
+        }
+      );
+      const deleteBtn = DOMUtils.createButton(
+        "Delete",
+        "inside-task-btn",
+        (event) => {
+          HandleAddTask.deleteTask(event, task.id);
+        }
+      );
 
       taskElement.append(editBtn, deleteBtn);
       tasksContainer.appendChild(taskElement);

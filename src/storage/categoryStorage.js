@@ -1,8 +1,8 @@
-function saveCategoryInStorage() {
+export function saveCategoryInStorage() {
   window.localStorage.setItem("categories", JSON.stringify(categories));
 }
 
-function getCategoryfromStorage() {
+export function getCategoryfromStorage() {
   let categories = JSON.parse(localStorage.getItem("categories") || "[]");
   if (categories) {
     return categories;

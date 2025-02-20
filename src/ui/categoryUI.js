@@ -1,4 +1,8 @@
 import { DOMUtils } from "./DOMUtils";
+import { saveCategoryInStorage } from "../storage/categoryStorage";
+import { getCategoryfromStorage } from "../storage/categoryStorage";
+import { Category } from "../components/category";
+import { addEventsToCategory } from "../handlers/categoryHandler";
 
 export const newCategoryButton = {
   initializeButtonEvent: () => {
@@ -9,13 +13,6 @@ export const newCategoryButton = {
     });
   },
 };
-
-function removeCategoryInput(input, addBtn, cancelBtn, newCategoryBtn) {
-  input.remove();
-  addBtn.remove();
-  cancelBtn.remove();
-  newCategoryBtn.style.display = "block";
-}
 
 function showCategoryNewInput() {
   const categoryArea = document.querySelector(".categories-section");
@@ -36,18 +33,18 @@ function showCategoryNewInput() {
 
 function addCategoryToList(categoryName) {
   // save to local
-
   if (categoryName) {
     let newCat = new Category(categoryName, Date.now());
     categories.push(newCat);
 
     saveCategoryInStorage();
-    makeCategory();
+    displayCategories(getCategoryfromStorage());
   } else {
     alert("Please enter a category name!");
   }
 }
-// displayCategories(getCategoryfromStorage());
+
+displayCategories(getCategoryfromStorage());
 
 function displayCategories(categoriesInStorage) {
   const categoryList = document.querySelector(".categories-list");
@@ -60,8 +57,8 @@ function displayCategories(categoriesInStorage) {
 
     categoryList.append(newCategory);
 
-    const deleteBtn = createButton("Delete", "inside-category-btn");
-    const editBtn = createButton("Edit", "inside-category-btn");
+    const deleteBtn = DOMUtils.createButton("Delete", "inside-category-btn");
+    const editBtn = DOMUtils.createButton("Edit", "inside-category-btn");
     newCategory.append(editBtn, deleteBtn);
 
     addEventsToCategory(newCategory, deleteBtn, editBtn);
@@ -69,4 +66,10 @@ function displayCategories(categoriesInStorage) {
     document.querySelector(".cancel-category-confirm")?.click();
     newCategory.click();
   });
+}
+function removeCategoryInput(input, addBtn, cancelBtn, newCategoryBtn) {
+  input.remove();
+  addBtn.remove();
+  cancelBtn.remove();
+  newCategoryBtn.style.display = "block";
 }

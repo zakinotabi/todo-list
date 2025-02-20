@@ -1,3 +1,5 @@
+import { HandleAddTask } from "../tasksHandler/addTask";
+
 function categoryButtonsAnimation(category, button) {
   category.addEventListener("mouseover", () => {
     if (category.children.length <= 3) {
@@ -10,7 +12,11 @@ function categoryButtonsAnimation(category, button) {
   });
 }
 
-function addEventsToCategory(category, deleteCategoryBtn, editCategoryBtn) {
+export function addEventsToCategory(
+  category,
+  deleteCategoryBtn,
+  editCategoryBtn
+) {
   //
   categoryButtonsAnimation(category, deleteCategoryBtn);
   categoryButtonsAnimation(category, editCategoryBtn);
