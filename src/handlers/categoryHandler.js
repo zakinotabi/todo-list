@@ -1,5 +1,6 @@
 import { HandleAddTask } from "../tasksHandler/addTask";
-
+import { CategoryStorage } from "../storage/categoryStorage";
+import { DOMUtils } from "../ui/DOMUtils";
 function categoryButtonsAnimation(category, button) {
   category.addEventListener("mouseover", () => {
     if (category.children.length <= 3) {
@@ -26,12 +27,12 @@ export function addEventsToCategory(
 
   deleteCategoryBtn.addEventListener("click", () => {
     category.remove();
-    deleteCategoryFromStorage(category);
-    deleteTasksOfThisCategoryFromStorage(category);
+    CategoryStorage.deleteCategory(category);
+    CategoryStorage.deleteTasksForCategory(category);
   });
 
   editCategoryBtn.addEventListener("click", () => {
-    const input = createInput();
+    const input = DOMUtils.createInput();
     input.value = category.firstElementChild.innerHTML;
 
     category.firstElementChild.style.display = "none";
@@ -45,7 +46,7 @@ export function addEventsToCategory(
       if (category.firstElementChild.innerHTML !== input.value) {
         category.firstElementChild.innerHTML = input.value;
         //update in localdtorage
-        updateCategoryNameInStorage(category, input.value);
+        CategoryStorage.updateCategoryName(category, input.value);
       }
       category.firstElementChild.style.display = "";
       categoryButtonsAnimation(category, deleteCategoryBtn);

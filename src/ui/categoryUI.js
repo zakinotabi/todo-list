@@ -1,8 +1,9 @@
 import { DOMUtils } from "./DOMUtils";
-import { saveCategoryInStorage } from "../storage/categoryStorage";
-import { getCategoryfromStorage } from "../storage/categoryStorage";
+import { CategoryStorage } from "../storage/categoryStorage";
 import { Category } from "../components/category";
 import { addEventsToCategory } from "../handlers/categoryHandler";
+
+let categoriesArray = CategoryStorage.getCategories();
 
 export const newCategoryButton = {
   initializeButtonEvent: () => {
@@ -35,16 +36,16 @@ function addCategoryToList(categoryName) {
   // save to local
   if (categoryName) {
     let newCat = new Category(categoryName, Date.now());
-    categories.push(newCat);
+    categoriesArray.push(newCat);
 
-    saveCategoryInStorage();
-    displayCategories(getCategoryfromStorage());
+    CategoryStorage.saveCategory(categoriesArray);
+    displayCategories(categoriesArray);
   } else {
     alert("Please enter a category name!");
   }
 }
 
-displayCategories(getCategoryfromStorage());
+displayCategories(CategoryStorage.getCategories());
 
 function displayCategories(categoriesInStorage) {
   const categoryList = document.querySelector(".categories-list");
