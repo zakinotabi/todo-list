@@ -167,12 +167,23 @@ h2 {
   display: none;
   align-self: flex-end;
 }
-
-li {
+.categories-list li {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
+#tasks-container li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+#tasks-container li > div {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  overflow-wrap: break-word;
+}
+
 .high {
   border-right: #ff4444 2px solid;
 }

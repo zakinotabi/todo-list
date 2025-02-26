@@ -28,9 +28,10 @@ export class DOMUtils {
     return button;
   }
 
-  static createInput() {
+  static createInput(type, className) {
     const input = document.createElement("input");
-    input.classList.add("category-input");
+    input.type = type;
+    input.classList.add(className);
     return input;
   }
 }

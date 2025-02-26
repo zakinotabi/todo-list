@@ -1,15 +1,16 @@
 export class CategoryStorage {
-  static saveCategory(categories) {
+  static saveCategory(category) {
+    const categories = this.getCategories();
+    categories.push(category);
+    this.saveAllCategories(categories);
+  }
+
+  static saveAllCategories(categories) {
     window.localStorage.setItem("categories", JSON.stringify(categories));
   }
 
   static getCategories() {
-    let categories = JSON.parse(localStorage.getItem("categories") || "[]");
-    if (categories.length) {
-      return categories;
-    }
-    document.querySelectorAll(".category-item")[0]?.click();
-    return [];
+    return JSON.parse(localStorage.getItem("categories") || "[]");
   }
 
   static deleteCategory(categoryHolder) {

@@ -1,76 +1,80 @@
 import { DOMUtils } from "./DOMUtils";
 import { CategoryStorage } from "../storage/categoryStorage";
 import { Category } from "../components/category";
-import { addEventsToCategory } from "../handlers/categoryHandler";
+import { CategoryHandler } from "../handlers/categoryHandler";
 
-let categoriesArray = CategoryStorage.getCategories();
-
-export const newCategoryButton = {
-  initializeButtonEvent: () => {
+export class CategoryUI {
+  static initializeButtonEvent() {
     const newCategoryBtn = document.getElementById("new-category-btn");
-    // Handle showing category input
-    newCategoryBtn.addEventListener("click", () => {
-      showCategoryNewInput();
-    });
-  },
-};
-
-function showCategoryNewInput() {
-  const categoryArea = document.querySelector(".categories-section");
-  const newCategoryBtn = document.getElementById("new-category-btn");
-
-  const categoryInput = DOMUtils.createInput();
-  const addInputBtn = DOMUtils.createButton("Add", "add-category-confirm", () =>
-    addCategoryToList(categoryInput.value)
-  );
-  // prettier-ignore
-  const cancelInputBtn = DOMUtils.createButton("Cancel", "cancel-category-confirm", () => {
-      removeCategoryInput(categoryInput, addInputBtn, cancelInputBtn, newCategoryBtn);
-    });
-
-  newCategoryBtn.style.display = "none";
-  categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
-}
-
-function addCategoryToList(categoryName) {
-  // save to local
-  if (categoryName) {
-    let newCat = new Category(categoryName, Date.now());
-    categoriesArray.push(newCat);
-
-    CategoryStorage.saveCategory(categoriesArray);
-    displayCategories(categoriesArray);
-  } else {
-    alert("Please enter a category name!");
+    newCategoryBtn.addEventListener("click", () => this.showCategoryNewInput());
+    this.displayCategories(CategoryStorage.getCategories());
   }
-}
 
-displayCategories(CategoryStorage.getCategories());
+  static showCategoryNewInput() {
+    const categoryArea = document.querySelector(".categories-section");
+    const newCategoryBtn = document.getElementById("new-category-btn");
 
-function displayCategories(categoriesInStorage) {
-  const categoryList = document.querySelector(".categories-list");
-  categoryList.innerHTML = "";
-  categoriesInStorage.forEach((category) => {
-    const newCategory = document.createElement("li");
-    newCategory.classList.add("category-item");
-    newCategory.setAttribute("cat-id", category.id);
-    newCategory.innerHTML = `<div>${category.name}</div>`;
+    const categoryInput = DOMUtils.createInput("text", "category-input");
+    const addInputBtn = DOMUtils.createButton(
+      "Save",
+      "add-category-confirm",
+      () => this.addCategoryToList(categoryInput.value)
+    );
+    const cancelInputBtn = DOMUtils.createButton(
+      "Cancel",
+      "cancel-category-confirm",
+      () => {
+        this.removeCategoryInput(
+          categoryInput,
+          addInputBtn,
+          cancelInputBtn,
+          newCategoryBtn
+        );
+      }
+    );
 
-    categoryList.append(newCategory);
+    newCategoryBtn.style.display = "none";
+    categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
+  }
 
-    const deleteBtn = DOMUtils.createButton("Delete", "inside-category-btn");
-    const editBtn = DOMUtils.createButton("Edit", "inside-category-btn");
-    newCategory.append(editBtn, deleteBtn);
+  static addCategoryToList(categoryName) {
+    if (categoryName) {
+      let newCat = new Category(categoryName, Date.now());
+      CategoryStorage.saveCategory(newCat);
+      this.displayCategories(CategoryStorage.getCategories());
+    } else {
+      alert("Please enter a category name!");
+    }
+  }
 
-    addEventsToCategory(newCategory, deleteBtn, editBtn);
+  static displayCategories(categoriesInStorage) {
+    const categoryList = document.querySelector(".categories-list");
+    if (!categoryList) return;
 
-    document.querySelector(".cancel-category-confirm")?.click();
-    newCategory.click();
-  });
-}
-function removeCategoryInput(input, addBtn, cancelBtn, newCategoryBtn) {
-  input.remove();
-  addBtn.remove();
-  cancelBtn.remove();
-  newCategoryBtn.style.display = "block";
+    categoryList.innerHTML = "";
+    categoriesInStorage.forEach((category) => {
+      const newCategory = document.createElement("li");
+      newCategory.classList.add("category-item");
+      newCategory.setAttribute("cat-id", category.id);
+      newCategory.innerHTML = `<div>${category.name}</div>`;
+
+      categoryList.append(newCategory);
+
+      const deleteBtn = DOMUtils.createButton("Delete", "inside-category-btn");
+      const editBtn = DOMUtils.createButton("Edit", "inside-category-btn");
+      newCategory.append(editBtn, deleteBtn);
+
+      CategoryHandler.addEventsToCategory(newCategory, deleteBtn, editBtn);
+
+      document.querySelector(".cancel-category-confirm")?.click();
+      newCategory.click();
+    });
+  }
+
+  static removeCategoryInput(input, addBtn, cancelBtn, newCategoryBtn) {
+    input.remove();
+    addBtn.remove();
+    cancelBtn.remove();
+    newCategoryBtn.style.display = "block";
+  }
 }

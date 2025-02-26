@@ -1,10 +1,12 @@
 import "./styles.css";
 
 // Import UI handlers
-import { newTaskButton } from "./ui/taskUI";
-import { newCategoryButton } from "./ui/categoryUI";
+import { TaskUI } from "./ui/taskUI";
+
+import { CategoryUI } from "./ui/categoryUI";
 // Initialize modal event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  newTaskButton.initializeButtonEvent();
-  newCategoryButton.initializeButtonEvent();
+  TaskUI.initializeButtonEvent();
+
+  CategoryUI.initializeButtonEvent();
 });

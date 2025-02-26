@@ -5,10 +5,18 @@ export class ModalUI {
   static initializeModalEvents() {
     this.closeButton.addEventListener("click", () => this.modalWindow.close());
     this.modalWindow.showModal();
+    this.clearModal();
   }
 
   static closeModal() {
     this.modalWindow.close();
+  }
+
+  static clearModal() {
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("due-date").value = "";
+    document.getElementById("priority").value = "";
   }
 }
 
