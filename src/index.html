@@ -16,12 +16,10 @@
       </section>
 
       <section class="tasks-section">
-        <h2>Tasks</h2>
-        <!-- <div class="date-navigation">
-          <button class="date-button" id="prev-day">‹</button>
-          <input type="date" class="date-picker" id="date-selector" />
-          <button class="date-button" id="next-day">›</button>
-        </div> -->
+        <div class="tasks-section-header">
+          <h2>Tasks</h2>
+          <button class="show-all-tasks">All Tasks</button>
+        </div>
         <ul class="tasks-list" id="tasks-container"></ul>
         <button class="new-button" id="new-task-btn">+ New Task</button>
         <div id="todo-list"></div>
@@ -34,9 +32,9 @@
           <input type="date" id="due-date" />
 
           <select id="priority">
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
           </select>
           <div class="form-buttons">
             <button type="button" id="add-task-confirm">Save Task</button>

@@ -39,18 +39,3 @@ export class CategoryStorage {
     window.localStorage.setItem("categories", JSON.stringify(data));
   }
 }
-
-// let categories = [];
-
-// (function initiat() {
-//   let categoriesFromStorage = JSON.parse(
-//     window.localStorage.getItem("categories")
-//   );
-//   if (categoriesFromStorage) {
-//     categoriesFromStorage.forEach((element) => {
-//       categories.push(element);
-//     });
-//     makeCategory();
-//   }
-// })();
-// //

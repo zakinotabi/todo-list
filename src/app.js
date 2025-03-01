@@ -9,4 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   TaskUI.initializeButtonEvent();
 
   CategoryUI.initializeButtonEvent();
+
+  document.querySelectorAll(".category-item")[0]?.click();
 });

@@ -20,24 +20,22 @@ export class CategoryHandler {
     });
 
     editCategoryBtn.addEventListener("click", () => {
-      const input = DOMUtils.createInput();
+      const input = DOMUtils.createInput("text", "categoryInput");
       input.value = category.firstElementChild.innerHTML;
 
       category.firstElementChild.style.display = "none";
-      deleteCategoryBtn.style.display = "none";
-      editCategoryBtn.style.display = "none";
+      category.classList.toggle("editing");
 
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") input.blur();
       });
       input.addEventListener("blur", () => {
-        if (category.firstElementChild.innerHTML !== input.value) {
+        if (category.firstElementChild.innerHTML !== input.value && input.value !== "") {
           category.firstElementChild.innerHTML = input.value;
           CategoryStorage.updateCategoryName(category, input.value);
         }
-        category.firstElementChild.style.display = "";
-        this.categoryButtonsAnimation(category, deleteCategoryBtn);
-        this.categoryButtonsAnimation(category, editCategoryBtn);
+        category.firstElementChild.style.display = "block";
+        category.classList.toggle("editing");
         input.remove();
       });
       category.append(input);
@@ -46,7 +44,7 @@ export class CategoryHandler {
   }
   static categoryButtonsAnimation(category, button) {
     category.addEventListener("mouseover", () => {
-      if (category.children.length <= 3) {
+      if (!category.classList.contains("editing")) {
         button.style.display = "block";
       }
     });
@@ -57,7 +55,6 @@ export class CategoryHandler {
   }
   static handleCategoryItems(categoryDiv) {
     this.selectedCategoryId = categoryDiv.getAttribute("cat-id");
-
     TaskUI.showAllTasksBasedOnCategory(this.selectedCategoryId);
   }
 }

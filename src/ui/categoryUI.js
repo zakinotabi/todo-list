@@ -1,4 +1,4 @@
-import { DOMUtils } from "./DOMUtils";
+import { DOMUtils, SvgImages } from "./DOMUtils";
 import { CategoryStorage } from "../storage/categoryStorage";
 import { Category } from "../components/category";
 import { CategoryHandler } from "../handlers/categoryHandler";
@@ -14,27 +14,19 @@ export class CategoryUI {
     const categoryArea = document.querySelector(".categories-section");
     const newCategoryBtn = document.getElementById("new-category-btn");
 
+    const buttonsContainer = DOMUtils.createElement("div", "add-category-btns-container", "");
     const categoryInput = DOMUtils.createInput("text", "category-input");
-    const addInputBtn = DOMUtils.createButton(
-      "Save",
-      "add-category-confirm",
-      () => this.addCategoryToList(categoryInput.value)
-    );
-    const cancelInputBtn = DOMUtils.createButton(
-      "Cancel",
-      "cancel-category-confirm",
-      () => {
-        this.removeCategoryInput(
-          categoryInput,
-          addInputBtn,
-          cancelInputBtn,
-          newCategoryBtn
-        );
-      }
-    );
+    categoryInput.placeholder = "Category Name";
+
+    const addInputBtn = DOMUtils.createButton("Save", "Save new category", "add-category-confirm", () => this.addCategoryToList(categoryInput.value));
+    const cancelInputBtn = DOMUtils.createButton("Cancel", "Cancel", "cancel-category-confirm", () => {
+      this.removeCategoryInput(categoryInput, addInputBtn, cancelInputBtn, newCategoryBtn);
+    });
 
     newCategoryBtn.style.display = "none";
-    categoryArea.append(categoryInput, addInputBtn, cancelInputBtn);
+    buttonsContainer.append(addInputBtn, cancelInputBtn);
+    categoryArea.append(categoryInput, buttonsContainer);
+    categoryInput.focus();
   }
 
   static addCategoryToList(categoryName) {
@@ -56,13 +48,14 @@ export class CategoryUI {
       const newCategory = document.createElement("li");
       newCategory.classList.add("category-item");
       newCategory.setAttribute("cat-id", category.id);
-      newCategory.innerHTML = `<div>${category.name}</div>`;
-
+      newCategory.innerHTML = `<h4>${category.name}</h4>`;
       categoryList.append(newCategory);
 
-      const deleteBtn = DOMUtils.createButton("Delete", "inside-category-btn");
-      const editBtn = DOMUtils.createButton("Edit", "inside-category-btn");
-      newCategory.append(editBtn, deleteBtn);
+      const buttonsContainer = DOMUtils.createElement("div", "category-btns-container", "");
+      const deleteBtn = DOMUtils.createButton(`${SvgImages.deleteSvg}`, "Delete", "delete-category-btn");
+      const editBtn = DOMUtils.createButton(`${SvgImages.editSvg}`, "Edit", "edit-category-btn");
+      buttonsContainer.append(editBtn, deleteBtn);
+      newCategory.append(buttonsContainer);
 
       CategoryHandler.addEventsToCategory(newCategory, deleteBtn, editBtn);
 

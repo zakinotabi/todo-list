@@ -3,177 +3,48 @@ import { TaskUI } from "../ui/taskUI.js";
 import { ModalUI } from "../ui/modal.js";
 export class TaskHandler {
   static editMode = false;
+  static taskSelected = null;
 
-  static fillModal(event) {
-    event.preventDefault();
+  static fillModal(task) {
+    // event.preventDefault();
     ModalUI.initializeModalEvents();
-
-    //save mode
+    //save mode and task
     this.editMode = true;
-
-    //fill
-    let elementId = parseInt(
-      event.target.closest("[data-id]").getAttribute("data-id")
-    );
-
-    let taskSelected = TaskStorage.getTaskById(elementId);
-
-    document.getElementById("title").value = taskSelected.title;
-    document.getElementById("description").value = taskSelected.description;
-    document.getElementById("due-date").valueAsDate = new Date(
-      taskSelected.date
-    );
-    document.getElementById("priority").value = taskSelected.priority;
+    this.taskSelected = task;
+    // fill the modal inputs with the task's current data
+    document.getElementById("title").value = task.title;
+    document.getElementById("description").value = task.description;
+    document.getElementById("due-date").valueAsDate = new Date(task.date);
+    document.getElementById("priority").value = task.priority;
   }
 
-  //   // Remove from DOM
-  //   event.target.closest("li").remove();
+  static updateTask() {
+    // current values of the modal inputs
+    const title = document.getElementById("title").value;
+    const description = document.getElementById("description").value;
+    const date = document.getElementById("due-date").value;
+    const priority = document.getElementById("priority").value;
+    // Update the selected task with new values
+    this.taskSelected.title = title;
+    this.taskSelected.description = description;
+    this.taskSelected.date = date;
+    this.taskSelected.priority = priority;
+    // Update the selected task in storage and DOM
+    TaskUI.updateTaskUI(this.taskSelected);
+    TaskStorage.updateTask(this.taskSelected);
+    ModalUI.closeModal();
+  }
 
-  // static handleTaskEdit() {
-  //   if (!HandleAddTask.editMode) {
-  //     TaskHandler.handleAddTaskFlow();
-  //   } else {
-  //     HandleAddTask.updateTask();
-  //     HandleAddTask.editMode = false;
-  //     HandleAddTask.currentEditId = null; // Reset after update
-  //   }
-  // }
+  static taskCompletion(task) {
+    task.completed = !task.completed;
+    TaskStorage.updateTask(task);
+  }
 
-  // static handleAddTaskFlow() {
-  //   const taskHandler = new HandleAddTask();
-  //   taskHandler.makeNewObject();
-  //   HandleAddTask.showTasksFromStorageBasedOnCategory(taskHandler.categoryId);
-  // }
+  static expandTask(event) {
+    const taskItem = event.target.closest(".task");
+    const taskDescription = taskItem.querySelector(".task-description-container");
+    const button = event.target.closest(".expand-task-btn");
+    button.classList.toggle("rotate-svg");
+    taskDescription.classList.toggle("expand-description");
+  }
 }
-
-// // Set event listener for Add/Update button
-
-// const modalWidnow = document.getElementById("todo-modal");
-// const closebutton = document.getElementById("close-modal");
-// const addbtnn = document.getElementById("add-task-confirm");
-
-// closebutton.addEventListener("click", () => ModalUI.closeModal());
-
-// addbtnn.addEventListener("click", () => {
-//   if (!HandleAddTask.editMode) {
-//     handleAddTaskFlow();
-//   } else {
-//     HandleAddTask.updateTask();
-//     HandleAddTask.editMode = false;
-//     HandleAddTask.currentEditId = null; // Reset after update
-//   }
-// });
-
-// function handleAddTaskFlow() {
-//   // 1. Create handler instance with current form values
-//   const taskHandler = new HandleAddTask();
-
-//   // 2. Create and save new task
-//   taskHandler.makeNewObject();
-
-//   // 3. Refresh the task list for the current category
-//   HandleAddTask.showTasksFromStorageBasedOnCategory(taskHandler.categoryId);
-// }
-
-// export class HandleAddTask {
-//   static editMode = false;
-//   static currentEditId = null;
-
-//   constructor() {
-//     // Get form values when instance is created
-//     this.title = document.getElementById("title").value;
-//     this.description = document.getElementById("description").value;
-//     this.date = document.getElementById("due-date").value;
-//     this.priority = document.getElementById("priority").value;
-//     this.id = Date.now();
-//     this.categoryId = getSelectedCategory();
-//   }
-
-//   makeNewObject() {
-//     // Validate inputs
-//     if (!this.title || !this.description || !this.date || !this.priority) {
-//       alert("Please fill out all fields.");
-//       return;
-//     } else {
-//       // Create new task and save
-//       const taskObj = new Task(
-//         this.title,
-//         this.description,
-//         this.date,
-//         this.priority,
-//         this.id,
-//         this.categoryId
-//       );
-
-//       saveTaskToStorage(taskObj);
-
-//       HandleAddTask.clearForm();
-//       modalWidnow.close();
-//     }
-//   }
-
-//   static showTasksFromStorageBasedOnCategory(categoryId) {
-//     let TasksOfCategorySelected = getTasksByCategory(categoryId);
-//     if (TasksOfCategorySelected) {
-//       HandleAddTask.appendTasksToDOM(TasksOfCategorySelected);
-//     }
-//   }
-
-//   static appendTasksToDOM(tasks) {
-//     const tasksContainer = document.getElementById("tasks-container");
-//     tasksContainer.innerHTML = ""; // Clear the list before appending tasks
-
-//     tasks.forEach((task) => {
-//       // Create a new task element
-//       const taskElement = document.createElement("li");
-//       taskElement.classList = `task-item ${task.priority}`;
-//       taskElement.setAttribute("data-id", task.id);
-//       taskElement.innerHTML = `
-//         <input type="checkbox" name="Completed" id="checkbox-task">
-//         <h3>${task.title}</h3>
-//         <p>${task.desc}</p>
-//         <p> ${task.date}</p>
-//         <p>Priority: ${task.priority}</p>
-//       `;
-
-//       const checkbox = taskElement.firstElementChild;
-//       checkbox.addEventListener("change", () => {
-//         checkbox.parentElement.classList.toggle("checked");
-//       });
-
-//       const editBtn = DOMUtils.createButton(
-//         "Edit",
-//         "inside-task-btn",
-//         (event) => {
-//           HandleAddTask.editTask(event);
-//         }
-//       );
-//       const deleteBtn = DOMUtils.createButton(
-//         "Delete",
-//         "inside-task-btn",
-//         (event) => {
-//           HandleAddTask.deleteTask(event, task.id);
-//         }
-//       );
-
-//       taskElement.append(editBtn, deleteBtn);
-//       tasksContainer.appendChild(taskElement);
-//     });
-//   }
-
-// // static updateTask() {
-// //   let data = JSON.parse(window.localStorage.getItem("tasks"));
-// //   data.forEach((task) => {
-// //     if (task.id === parseInt(HandleAddTask.currentEditId)) {
-// //       task.title = document.getElementById("title").value;
-// //       task.desc = document.getElementById("description").value;
-// //       task.date = document.getElementById("due-date").value;
-// //       task.priority = document.getElementById("priority").value;
-// //     }
-// //   });
-// //   document.getElementById("close-modal").click();
-// //   window.localStorage.setItem("tasks", JSON.stringify(data));
-// //   HandleAddTask.showTasksFromStorageBasedOnCategory(getSelectedCategory());
-// //   HandleAddTask.editMode = false;
-// //   HandleAddTask.clearForm();
-// // }

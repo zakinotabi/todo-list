@@ -19,8 +19,3 @@ export class ModalUI {
     document.getElementById("priority").value = "";
   }
 }
-
-// // Initialize event listeners when the script loads
-// document.addEventListener("DOMContentLoaded", () => {
-//   ModalUI.initializeModalEvents();
-// });
