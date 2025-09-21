@@ -156,7 +156,6 @@ export class TaskUI {
     // Create example tasks for each category
     const tasks = [
       // Tasks for Work category
-      new Task("This project is so F- HARD!", "this took me like forever, seperating my code was hard for me", "2023-10-15", "High", 101, "1"),
       new Task("Finish report", "Complete the quarterly report", "2023-10-15", "High", 102, "1"),
       new Task("Team meeting", "Attend the weekly team meeting", "2023-10-16", "Medium", 103, "1"),
       new Task("Email client", "Send follow-up email to client", "2023-10-17", "Low", 104, "1"),
